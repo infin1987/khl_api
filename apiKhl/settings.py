@@ -7,5 +7,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRES_MINUTES: int
     REFRESH_TOKEN_EXPIRES_MINUTES: int
     ALGORITHM: str = "HS256"
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_DB: int
 
 settings = Settings()
