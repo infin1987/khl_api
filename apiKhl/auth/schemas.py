@@ -27,7 +27,7 @@ class TokenExpires(StrEnum):
 class UserBase(BaseModel):
     username: str
     email: str | None = None
-    role: UserRoles = UserRoles.USER
+    role: UserRoles | None = UserRoles.USER
 
 
 class UserCreate(UserBase):
@@ -48,6 +48,7 @@ class Token(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str
+    action: str = 'created'
 
 
 class TokenData(BaseModel):
