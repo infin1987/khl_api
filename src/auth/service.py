@@ -7,12 +7,12 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from apiKhl.auth.dependencies import db_dep, oauth2_dep, rcache_dep
-from apiKhl.auth.exceptions import noUserException, credentialException, tokenExpiredException
-from apiKhl.auth.repositories import get_user_repositories
-from apiKhl.auth import schemas
-from apiKhl.db.auth.session import get_db, get_redis_client
-from apiKhl.settings import settings
+from auth.dependencies import db_dep, oauth2_dep, rcache_dep
+from auth.exceptions import noUserException, credentialException, tokenExpiredException
+from auth.repositories import get_user_repositories
+from auth import schemas
+from db.auth.session import get_db, get_redis_client
+from settings import settings
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from jose.exceptions import ExpiredSignatureError

@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from redis.asyncio.client import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from apiKhl.db.auth.session import get_db, get_redis_client
+from db.auth.session import get_db, get_redis_client
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from apiKhl.api.router import api_router
-from apiKhl.auth.router import auth_router
+import uvicorn
+from api.router import api_router
+from auth.router import auth_router
 
 # from .dependencies import get_query_token, get_token_header
 # from .internal import admin
@@ -26,3 +27,6 @@ app.include_router(auth_router, prefix='/auth', tags=['auth'])
 # @app.get("/")
 # async def root():
 #     return {"message": "Hello Bigger Applications!"}
+
+if __name__=="__main__":
+    uvicorn.run(app, host='127.0.0.1', port=8000)

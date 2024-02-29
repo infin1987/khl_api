@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 
 
-from apiKhl.auth.dependencies import form_dep, db_dep, oauth2_dep, rcache_dep
-from apiKhl.auth.schemas import UserInDB, User, UserBase, Token, TokenRefreshData
-from apiKhl.auth.service import get_current_active_user, login_user, refreshTokens
+from auth.dependencies import form_dep, db_dep, oauth2_dep, rcache_dep
+from auth.schemas import UserInDB, User, UserBase, Token, TokenRefreshData
+from auth.service import get_current_active_user, login_user, refreshTokens
 
 auth_router = APIRouter()
 

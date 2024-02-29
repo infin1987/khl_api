@@ -1,6 +1,6 @@
 from redis.asyncio.client import Redis
 
-from apiKhl.settings import settings
+from settings import settings
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker

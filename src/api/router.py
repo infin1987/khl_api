@@ -1,8 +1,8 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-from apiKhl.auth.schemas import Token
-from apiKhl.auth.service import oauth2_scheme
+from auth.schemas import Token
+from auth.service import oauth2_scheme
 api_router = APIRouter()
 
 @api_router.get('/')
