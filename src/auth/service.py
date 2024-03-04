@@ -1,17 +1,13 @@
-import json
 from datetime import timedelta, datetime, timezone
 from typing import Annotated, Literal
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from redis.asyncio import Redis
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from auth.dependencies import db_dep, oauth2_dep, rcache_dep
-from auth.exceptions import noUserException, credentialException, tokenExpiredException
+from auth.dependencies import db_dep, rcache_dep
+from exceptions import noUserException, credentialException, tokenExpiredException
 from auth.repositories import get_user_repositories
 from auth import schemas
-from db.auth.session import get_db, get_redis_client
 from settings import settings
 from passlib.context import CryptContext
 from jose import JWTError, jwt
@@ -141,7 +137,7 @@ async def refreshTokens(
     if is_blacklisted:
         print('Refresh token is blacklisted')
         raise tokenExpiredException
-    await rcache.set(refresh_token, 1, ex=settings.REFRESH_TOKEN_EXPIRES_MINUTES)
+    await rcache.set(refresh_token, 1, ex=settings.REFRESH_TOKEN_EXPIRES_MINUTES*60)
     # TODO: add parent refresh_token as a value (to be able to kill all parents` tokens in case of vulnerability)
 
     access_token = create_token(data={'user': token_data.username, 'role': token_data.role}, token_kind='access')

@@ -1,6 +1,6 @@
 from redis.asyncio.client import Redis
 
-from settings import settings
+from src.settings import settings
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
@@ -8,10 +8,11 @@ from sqlalchemy.orm import sessionmaker
 from .models import fake_db
 import redis.asyncio as redis
 
-# engine = create_async_engine(settings.DATABASE_URL, future=True, echo=True)
+engine_data = create_async_engine(settings.DB_DATA_URL, future=True, echo=True)
 
 # async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
-# async_session = async_sessionmaker(engine, expire_on_commit=False)
+async_session_data = async_sessionmaker(engine_data, expire_on_commit=False)
+
 
 async def get_redis_client() -> Redis:
     try:
@@ -28,7 +29,8 @@ async def get_redis_client() -> Redis:
         print('closing conn to redis')
         await client.aclose()
 
-async def get_db() -> AsyncGenerator | dict:
+
+async def get_user_db() -> AsyncGenerator | dict:
     try:
         # session: AsyncSession = async_session()
         print('giving fakedb')

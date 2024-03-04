@@ -1,1 +1,110 @@
-# описать модели sqlalchemy
+import sqlalchemy
+from sqlalchemy import Integer, String, ForeignKey, Column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from clickhouse_sqlalchemy import types
+
+
+class Base(DeclarativeBase):
+    pass
+
+class PlayerGoalsFilter(Base):
+    __tablename__ = "pl_goals_api_filters"
+    global_id: Mapped[int] = mapped_column(types.UInt32, primary_key=True)
+    playername = Column(types.String, nullable=False)
+    position = Column(types.String, nullable=False)
+    clid = Column(types.UInt32, nullable=False)
+    tnt_id = Column(types.UInt32, nullable=False)
+    team_id = Column(types.UInt32, nullable=False)
+    team_name = Column(types.String, nullable=False)
+    season = Column(types.String, nullable=False)
+    league = Column(types.String, nullable=False)
+    tnt_type = Column(types.String, nullable=False)
+    time_period = Column(types.UInt8, nullable=False)
+    team_status = Column(types.String, nullable=True)
+    net = Column(types.String, nullable=True)
+    G = Column(types.UInt8, nullable=True)
+    A = Column(types.UInt8, nullable=True)
+    P = Column(types.UInt8, nullable=True)
+    EVG = Column(types.UInt8, nullable=True)
+    PPG = Column(types.UInt8, nullable=True)
+    SHG = Column(types.UInt8, nullable=True)
+    OTG = Column(types.UInt8, nullable=True)
+    first_g = Column(types.UInt8, nullable=True)
+    GWG = Column(types.UInt8, nullable=True)
+    GWG_Real = Column(types.UInt8, nullable=True)
+    GWS = Column(types.UInt8, nullable=True)
+
+
+# class PlayerGoals(Base):
+#     __tablename__ = "pl_goals_api"
+#     global_id = Column(types.UInt32, primary_key=True)
+#     playername = Column(types.String, nullable=False)
+#     position = Column(types.String, nullable=False)
+#     clid = Column(types.UInt32, nullable=False)
+#     tnt_id = Column(types.UInt32, nullable=False)
+#     team_id = Column(types.UInt32, nullable=False)
+#     team_name = Column(types.String, nullable=False)
+#     season = Column(types.String, nullable=False)
+#     league = Column(types.String, nullable=False)
+#     tnt_type = Column(types.String, nullable=False)
+#     GP = Column(types.UInt8, nullable=True)
+#     G = Column(types.UInt8, nullable=True)
+#     A = Column(types.UInt8, nullable=True)
+#     P = Column(types.UInt8, nullable=True)
+#     PIM = Column(types.UInt8, nullable=True)
+#     TGF = Column(types.UInt8, nullable=True)
+#     TGA = Column(types.UInt8, nullable=True)
+#     EVG = Column(types.UInt8, nullable=True)
+#     PPG = Column(types.UInt8, nullable=True)
+#     SHG = Column(types.UInt8, nullable=True)
+#     OTG = Column(types.UInt8, nullable=True)
+#     first_g = Column(types.UInt8, nullable=True)
+#     GWG = Column(types.UInt8, nullable=True)
+#     GWG_Real = Column(types.UInt8, nullable=True)
+#     GWS = Column(types.UInt8, nullable=True)
+#     PS_Att = Column(types.UInt8, nullable=True)
+#     PS_G = Column(types.UInt8, nullable=True)
+#     PS_percent = Column(types.UInt8, nullable=True)
+#     with_G = Column(types.UInt8, nullable=True)
+#     without_G = Column(types.UInt8, nullable=True)
+#     G_GP = Column(types.Float64, nullable=True)
+
+class PlayerGoals(Base):
+    __tablename__ = "pl_goals_api"
+    global_id: Mapped[int] = mapped_column(primary_key=True)
+    playername: Mapped[str] = mapped_column(nullable=False)
+    position: Mapped[str] = mapped_column(nullable=False)
+    # clid: Mapped[types.UInt32] = mapped_column(nullable=False)
+    # tnt_id: Mapped[types.UInt32] = mapped_column(nullable=False)
+    # team_id: Mapped[types.UInt32] = mapped_column(nullable=False)
+    clid: Mapped[int] = mapped_column(nullable=False)
+    tnt_id: Mapped[int] = mapped_column(nullable=False)
+    team_id: Mapped[int] = mapped_column(nullable=False)
+    team_name: Mapped[str] = mapped_column(nullable=False)
+    season: Mapped[str] = mapped_column(nullable=False)
+    league: Mapped[str] = mapped_column(nullable=False)
+    tnt_type: Mapped[str] = mapped_column(nullable=False)
+    GP: Mapped[int] = mapped_column(nullable=True)
+    G: Mapped[int] = mapped_column(nullable=True)
+    A: Mapped[int] = mapped_column(nullable=True)
+    P: Mapped[int] = mapped_column(nullable=True)
+    PIM: Mapped[int] = mapped_column(nullable=True)
+    TGF: Mapped[int] = mapped_column(nullable=True)
+    TGA: Mapped[int] = mapped_column(nullable=True)
+    EVG: Mapped[int] = mapped_column(nullable=True)
+    PPG: Mapped[int] = mapped_column(nullable=True)
+    SHG: Mapped[int] = mapped_column(nullable=True)
+    OTG: Mapped[int] = mapped_column(nullable=True)
+    first_g: Mapped[int] = mapped_column(nullable=True)
+    GWG: Mapped[int] = mapped_column(nullable=True)
+    GWG_Real: Mapped[int] = mapped_column(nullable=True)
+    GWS: Mapped[int] = mapped_column(nullable=True)
+    PS_Att: Mapped[int] = mapped_column(nullable=True)
+    PS_G: Mapped[int] = mapped_column(nullable=True)
+    PS_percent: Mapped[int] = mapped_column(nullable=True)
+    with_G: Mapped[int] = mapped_column(nullable=True)
+    without_G: Mapped[int] = mapped_column(nullable=True)
+    G_GP: Mapped[float] = mapped_column(nullable=True)
+
+
