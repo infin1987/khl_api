@@ -1,6 +1,6 @@
 from redis.asyncio.client import Redis
 
-from src.settings import settings
+from settings import settings
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
@@ -11,31 +11,34 @@ import redis.asyncio as redis
 engine_data = create_async_engine(settings.DB_DATA_URL, future=True, echo=True)
 
 # async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
-async_session_data = async_sessionmaker(engine_data, expire_on_commit=False)
+async_sessionmaker_user = async_sessionmaker(engine_data, expire_on_commit=False)
 
+
+# async def get_redis_client() -> Redis:
+#     try:
+#         print('trying to establish redis connection')
+#         client = redis.Redis(
+#             host=settings.REDIS_HOST,
+#             port=settings.REDIS_PORT,
+#             db=settings.REDIS_DB,
+#             decode_responses=True
+#         )
+#         print(type(client))
+#         yield client
+#     finally:
+#         print('closing conn to redis')
+#         await client.aclose()
 
 async def get_redis_client() -> Redis:
-    try:
-        print('trying to establish redis connection')
-        client = redis.Redis(
+    async with redis.Redis(
             host=settings.REDIS_HOST,
             port=settings.REDIS_PORT,
             db=settings.REDIS_DB,
-            decode_responses=True
-        )
-        print(type(client))
+            decode_responses=True) as client:
         yield client
-    finally:
-        print('closing conn to redis')
-        await client.aclose()
 
 
-async def get_user_db() -> AsyncGenerator | dict:
-    try:
-        # session: AsyncSession = async_session()
-        print('giving fakedb')
+async def get_user_db() -> AsyncGenerator[AsyncSession, None]:
+    async with async_sessionmaker_user() as session:
+        # yield session
         yield fake_db
-    finally:
-        print('closing conn to fakedb')
-        # await session.close()
-        pass
