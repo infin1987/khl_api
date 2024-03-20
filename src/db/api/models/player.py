@@ -44,7 +44,7 @@ class PlayersMainParamsMixin:
     A: Mapped[int] = mapped_column(nullable=True)
     P: Mapped[int] = mapped_column(nullable=True)
     PIM: Mapped[int] = mapped_column(nullable=True)
-    PlusMinus: Mapped[int] = mapped_column(nullable=True)
+    pm: Mapped[int] = mapped_column(nullable=True)
 
 
 class PlayersBio(PlayersBioMixin, PlayersMetricMixin, PlayersMainParamsMixin, Base):
@@ -176,3 +176,40 @@ class PlayersShotsFilter(PlayersMetricFilteredMixin, PlayersMetricMixin, Base):
     SH_MsS: Mapped[int] = mapped_column()
     EN_MsS: Mapped[int] = mapped_column()
     ENO_MsS: Mapped[int] = mapped_column()
+
+
+class PlayersTotal(PlayersMetricMixin, PlayersMainParamsMixin, Base):
+    __tablename__ = "pl_total_api"
+
+    EVG: Mapped[int] = mapped_column()
+    PPG: Mapped[int] = mapped_column()
+    SHG: Mapped[int] = mapped_column()
+    OTG: Mapped[int] = mapped_column()
+    first_g: Mapped[int] = mapped_column()
+    GWG: Mapped[int] = mapped_column()
+    GWS: Mapped[int] = mapped_column()
+    plus: Mapped[int] = mapped_column()
+    minus: Mapped[int] = mapped_column()
+    toi_avg: Mapped[str] = mapped_column()
+    pptoi_avg: Mapped[str] = mapped_column()
+    shtoi_avg: Mapped[str] = mapped_column()
+    eqtoi_avg: Mapped[str] = mapped_column()
+    entoi_avg: Mapped[str] = mapped_column()
+    ppsft_avg: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    shsft_avg: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    eqsft_avg: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    ensft_avg: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    sft_avg: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    FO: Mapped[int] = mapped_column()
+    FOW: Mapped[int] = mapped_column()
+    fo_pct: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    FoA: Mapped[int] = mapped_column()
+    TkA: Mapped[int] = mapped_column()
+    Hits: Mapped[int] = mapped_column()
+    P_Intc: Mapped[int] = mapped_column()
+    S: Mapped[int] = mapped_column()
+    SOG: Mapped[int] = mapped_column()
+    sog_pct: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    sog_avg: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
+    toa_avg: Mapped[str] = mapped_column()
+

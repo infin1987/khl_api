@@ -5,7 +5,8 @@ from sqlalchemy import select, func, desc
 
 from api.dependencies import db_dep
 from api.players.schemas import PlayersGoalsQuery
-from db.api.models.player import PlayersBio, PlayersGoals, PlayersGoalsFilter, PlayersMetricFilteredMixin
+from db.api.models.player import PlayersBio, PlayersGoals, PlayersGoalsFilter, PlayersMetricFilteredMixin, PlayersTotal
+from db.api.models.tournaments import Tournaments
 from exceptions import no_new_data_exception
 from service.helpers import check_last_updated
 from service.players.handlers import get_player_stats_by_metric
@@ -52,7 +53,7 @@ async def get_players_filtered(q: str):
 
 
 @players_router.get('')
-async def get_players(
+async def get_players_bio(
         db: db_dep,
         tnt_id: Annotated[str | None, Query()] = None,
 ):
@@ -62,6 +63,18 @@ async def get_players(
     print(len(ret))
     return ret
 
+@players_router.get('/total')
+async def get_players_total(
+        db: db_dep,
+        tnt_id: Annotated[str | None, Query()] = None,
+):
+    if not tnt_id:
+        stmt = select(Tournaments.tnt_id).order_by(desc(Tournaments.tnt_id))
+        tnt_id_data = await db.execute(stmt)
+        tnt_id = tnt_id_data.scalars().first()
+    data = await db.execute(select(PlayersTotal).where(PlayersTotal.tnt_id == tnt_id))
+    ret = data.scalars().all()
+    return ret
 
 @players_router.get('/{player_id}/metrics/{metric}/')
 # async def secured_data(token: oauth2_dep, db: db_dep):
