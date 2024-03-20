@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import APIRouter, Query, Request, Header, Path, Depends
 from sqlalchemy import select, func, desc
@@ -11,12 +11,9 @@ from exceptions import no_new_data_exception
 from service.helpers import check_last_updated
 from service.players.handlers import get_player_stats_by_metric
 
-from service.players.helpers import (get_schema_by_metric, get_proper_orm_model, get_basic_groupby_schema,
-                                     ModelSchemaHelper)
+from service.players.helpers import helper_dep
 
 players_router = APIRouter(prefix='/players', tags=['players'], dependencies=[Depends(check_last_updated)])
-
-helper_dep = Annotated[ModelSchemaHelper, Depends(ModelSchemaHelper('players', 'pl'))]
 
 
 @players_router.get('/test/{player_id}/{metric}')
