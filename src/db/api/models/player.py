@@ -176,4 +176,3 @@ class PlayersShotsFilter(PlayersMetricFilteredMixin, PlayersMetricMixin, Base):
     SH_MsS: Mapped[int] = mapped_column()
     EN_MsS: Mapped[int] = mapped_column()
     ENO_MsS: Mapped[int] = mapped_column()
-

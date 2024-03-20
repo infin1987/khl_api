@@ -4,10 +4,10 @@ from typing import Annotated, Literal
 from fastapi import Query
 from pydantic import BaseModel, Field
 
-class BaseGroupBy(BaseModel):
-    league: Literal['khl', 'mhl', 'whl', 'vhl', None] = None
-    tnt_id: int | None = None
-    tnt_type: Literal['r', 'p', None] = None
+# class BaseGroupBy(BaseModel):
+#     league: Literal['khl', 'mhl', 'whl', 'vhl', None] = None
+#     tnt_id: int | None = None
+#     tnt_type: Literal['r', 'p', None] = None
 
 # class PlayersGoalsQuery(BaseModel):
 #     # __tp__ = 'goals'

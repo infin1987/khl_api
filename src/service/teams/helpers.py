@@ -13,7 +13,7 @@ from auth.dependencies import rcache_dep
 import json, pickle
 
 from exceptions import no_new_data_exception
-metrics = ['goals', 'penalties', 'shots', 'faceoffs']
+metrics = ['goals', 'penalties', 'shots', 'faceoffs', 'attendance']
 
 def get_model_by_metric(tablename: str):
     for elem in Base.registry.mappers:
@@ -101,10 +101,8 @@ class ModelSchemaHelper:
             tnt_type: str | None = None,
             time_period: int | None = None,
             team_status: str | None = None,
-            net: str | None = None,
-            position: str | None = None,
     ) -> Base:
-        params = league, tnt_id, tnt_type, time_period, team_status, net, position
+        params = league, tnt_id, tnt_type, time_period, team_status
         tablename = f'{self.short_name}_{metric}_api_filters' if any(params) else f'{self.short_name}_{metric}_api'
         return self.get_orm_model_by_metric(tablename)
 
