@@ -4,7 +4,7 @@ from fastapi import APIRouter, Query, Request, Header, Path, Depends
 from sqlalchemy import select, func, desc
 
 from api.dependencies import db_dep
-from api.players.schemas import PlayersGoalsQuery
+from api.players.schemas import PlayersGoalsQuery, PlayersTotalResponse
 from db.api.models.player import PlayersBio, PlayersGoals, PlayersGoalsFilter, PlayersMetricFilteredMixin, PlayersTotal
 from db.api.models.tournaments import Tournaments
 from exceptions import no_new_data_exception
@@ -14,10 +14,10 @@ from service.players.handlers import get_player_stats_by_metric
 from service.players.helpers import (get_schema_by_metric, get_proper_orm_model, get_basic_groupby_schema,
                                      ModelSchemaHelper)
 
-
 players_router = APIRouter(prefix='/players', tags=['players'], dependencies=[Depends(check_last_updated)])
 
 helper_dep = Annotated[ModelSchemaHelper, Depends(ModelSchemaHelper('players', 'pl'))]
+
 
 @players_router.get('/test/{player_id}/{metric}')
 async def get_players(q: Request,
@@ -58,12 +58,13 @@ async def get_players_bio(
         tnt_id: Annotated[str | None, Query()] = None,
 ):
     data = await db.execute(select(PlayersBio))
-                            # .where(PlayersBio.tnt_id == tnt_id))
+    # .where(PlayersBio.tnt_id == tnt_id))
     ret = data.scalars().all()
     print(len(ret))
     return ret
 
-@players_router.get('/total')
+
+@players_router.get('/total', response_model=list[PlayersTotalResponse])
 async def get_players_total(
         db: db_dep,
         tnt_id: Annotated[str | None, Query()] = None,
@@ -72,9 +73,11 @@ async def get_players_total(
         stmt = select(Tournaments.tnt_id).order_by(desc(Tournaments.tnt_id))
         tnt_id_data = await db.execute(stmt)
         tnt_id = tnt_id_data.scalars().first()
+
     data = await db.execute(select(PlayersTotal).where(PlayersTotal.tnt_id == tnt_id))
     ret = data.scalars().all()
     return ret
+
 
 @players_router.get('/{player_id}/metrics/{metric}/')
 # async def secured_data(token: oauth2_dep, db: db_dep):
@@ -99,7 +102,6 @@ async def player_all_stats_by_metric(
     data = await db.execute(stmt)
     # ret = [val.__dict__ for val in data.scalars().all()]
     return data.scalars().all()
-
 
 # @players_router.get('/{player_id}/metrics/{metric}/')
 # # async def secured_data(token: oauth2_dep, db: db_dep):
