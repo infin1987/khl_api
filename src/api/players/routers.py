@@ -18,6 +18,7 @@ players_router = APIRouter(prefix='/players', tags=['players'], dependencies=[De
 
 helper_dep = Annotated[ModelSchemaHelper, Depends(ModelSchemaHelper('players', 'pl'))]
 
+
 @players_router.get('/test/{player_id}/{metric}')
 async def get_players(q: Request,
                       player_id: int,
@@ -86,7 +87,6 @@ async def player_all_stats_by_metric(
     data = await db.execute(stmt)
     # ret = [val.__dict__ for val in data.scalars().all()]
     return data.scalars().all()
-
 
 # @players_router.get('/{player_id}/metrics/{metric}/')
 # # async def secured_data(token: oauth2_dep, db: db_dep):
