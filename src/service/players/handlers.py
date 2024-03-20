@@ -1,0 +1,46 @@
+from typing import Annotated
+
+from fastapi import Depends, Path
+from sqlalchemy import select, func
+
+from api.dependencies import db_dep
+from service.players.helpers import filter_params_for_where_orm_objects, ModelSchemaHelper
+
+
+async def get_player_stats_by_metric(
+        player_id: int,
+        helper_obj: ModelSchemaHelper,
+        db: db_dep,
+        add_sum_col_names: list[str] | None = None,
+        add_group_by_col_names: list[str] | None = None,
+        exclude_sum: list[str] | None = None,
+        exclude_group: list[str] | None = None
+):
+    orm_model = helper_obj.orm_model
+    orm_model_columns = orm_model.get_columns()
+    basic_group_bys = helper_obj.basic_group_bys
+    query_params = helper_obj.validated_query_params
+
+    """Тут надо суммировать по всем полям показателей"""
+    cols_obj_to_sum = {name: func.sum(col).label(name) for name, col in orm_model.__table__.columns.items() if
+                       name in orm_model_columns}
+
+    # Basic_groupBys - это объекты или имена, по которым обязательно надо группировать, поэтому под них отдельная схема
+    basic_groupbys_names = list(basic_group_bys.keys())
+    basic_groupbys_obj: list = [getattr(orm_model, param_name) for param_name in basic_group_bys]
+
+    # Объекты алхимии для фильтрации
+    ands_obj = filter_params_for_where_orm_objects(req_model=orm_model, query_params=query_params, id_filter=player_id)
+
+    # GroupBy объекты, которые получаем из query параметров запроса (и смотрим, нет ли их в Basic)
+    group_bys_query_obj = [getattr(orm_model, param_name) for param_name, param_value in query_params.items()]
+    full_groupbys_obj = basic_groupbys_obj + [gr_by for gr_by in group_bys_query_obj if gr_by not in basic_groupbys_obj]
+
+    query_groupbys_names = [param_name for param_name in query_params.keys() if param_name not in basic_groupbys_names]
+    full_groupbys_names = basic_groupbys_names + query_groupbys_names
+
+    stmt = select(*full_groupbys_obj, *cols_obj_to_sum.values()).where(*ands_obj).group_by(*full_groupbys_names)
+    data = await db.execute(stmt)
+    data = data.mappings().all()
+
+    return data

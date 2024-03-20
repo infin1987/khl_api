@@ -12,3 +12,5 @@ tokenExpiredException = HTTPException(
     detail="Token expired",
     headers={"WWW-Authenticate": "Bearer"},
 )
+
+no_new_data_exception = HTTPException(status_code=404, detail="No new data availiable")
