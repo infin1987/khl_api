@@ -13,7 +13,9 @@ from auth.dependencies import rcache_dep
 import json, pickle
 
 from exceptions import no_new_data_exception
+
 metrics = ['goals', 'penalties', 'shots', 'faceoffs']
+
 
 def get_model_by_metric(tablename: str):
     for elem in Base.registry.mappers:
@@ -76,9 +78,10 @@ class ModelSchemaHelper:
 
     # TODO: Можно добавить метод, который в зависимости от метрики будет добавлять еще параметров в group_by и сумму
 
-    def __init__(self, name: str, short_name: str):
+    def __init__(self, name: str, short_name: str, metric: str, request: Request):
         self.name = name
         self.short_name = short_name
+        self.populate_with_params(metric, request)
 
     @staticmethod
     def get_query_params(request: Request) -> dict:
@@ -121,10 +124,10 @@ class ModelSchemaHelper:
     def get_basic_groupby_schema(self) -> BaseModel:
         return self.schema.__bases__[0]
 
-    def __call__(self,
-                 metric: Annotated[Literal[*metrics], Path()],
-                 request: Request
-                 ):
+    def populate_with_params(self,
+                             metric: str,
+                             request: Request
+                             ):
         try:
             self.metric = metric
             self.schema = self.get_schema_by_metric()
@@ -142,7 +145,15 @@ class ModelSchemaHelper:
         except AttributeError as ae:
             print(ae)
             raise HTTPException(status_code=400, detail='Wrong metric name')
-        return self
 
     def __repr__(self):
         return f'<{self.__class__}, {self.__dict__}'
+
+
+async def get_helper_obj(
+        metric: Annotated[Literal[*metrics], Path()],
+        request: Request):
+    yield ModelSchemaHelper('players', 'pl', metric, request)
+
+
+helper_dep = Annotated[ModelSchemaHelper, Depends(get_helper_obj)]

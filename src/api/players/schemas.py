@@ -62,3 +62,57 @@ class PlayersShotsQuery(PlayersGoalsQuery):
 
 class PlayersShotsFilteredQuery(PlayersShotsQuery, PlayersParamsValidator):
     pass
+
+
+class PlayersTotalResponse(BaseModel):
+
+    global_id: int
+    max_ts: int
+    tnt_id: int
+    team_id: int
+    playername: str
+    position: str
+    clid: int
+    team_name: str
+    season: str
+    league: str
+    tnt_type: str
+
+    GP: int
+    G: int
+    A: int
+    P: int
+    PIM: int
+    pm: int
+
+    EVG: int
+    PPG: int
+    SHG: int
+    OTG: int
+    first_g: int
+    GWG: int
+    GWS: int
+    plus: int
+    minus: int
+    toi_avg: str
+    pptoi_avg: str
+    shtoi_avg: str
+    eqtoi_avg: str
+    entoi_avg: str
+    ppsft_avg: float
+    shsft_avg: float
+    eqsft_avg: float
+    ensft_avg: float
+    sft_avg: float
+    FO: int
+    FOW: int
+    fo_pct: float
+    FoA: int
+    TkA: int
+    Hits: int
+    P_Intc: int
+    S: int
+    SOG: int
+    sog_pct: float
+    sog_avg: float
+    toa_avg: str
