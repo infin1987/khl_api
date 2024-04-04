@@ -16,38 +16,38 @@ from service.players.helpers import helper_dep
 players_router = APIRouter(prefix='/players', tags=['players'], dependencies=[Depends(check_last_updated)])
 
 
-
-@players_router.get('/test/{player_id}/{metric}')
-async def get_players(q: Request,
-                      player_id: int,
-                      # tnt_id: int | None,
-                      # obj: Annotated[ModelSchemaHelper, Depends(helper)]
-                      obj: helper_dep
-                      ):
-    print(obj)
-    print(type(q.query_params))
-    print(q.query_params.items())
-    print(q.query_params.multi_items(), q.query_params.getlist('q'))
-    # d = {key: value if key in d elsfor key, value in q.query_params.multi_items()}
-    d = {}
-    for k, v in q.query_params.multi_items():
-        print(k, v)
-        if k in d:
-            print([*(d[k],)] + [v])
-            d[k] = [*(d[k],)] + [v]
-        else:
-            d[k] = v
-
-    print(d)
-    for key, val in q.query_params.multi_items():
-        print(key, val)
-    return {'data': 'here should be some data'}
-    # PlayerGoalsFilteredQuery.model_validate(q.query_params.multi_items())
-
+# @players_router.get('/test/{player_id}/{metric}')
+# async def get_players(q: Request,
+#                       player_id: int,
+#                       # tnt_id: int | None,
+#                       # obj: Annotated[ModelSchemaHelper, Depends(helper)]
+#                       obj: helper_dep
+#                       ):
+#     print(f"Obj = {obj}")
+#     print(f"type(q.query_params): {type(q.query_params)}")
+#     print(f"q.query_params.items(): {q.query_params.items()}")
+#     print(f"q.query_params.multi_items(): {q.query_params.multi_items()}")
+#     print(f"q.query_params.getlist('q'): {q.query_params.getlist('q')}")
+#     # d = {key: value if key in d elsfor key, value in q.query_params.multi_items()}
+#     d = {}
+#     for k, v in q.query_params.multi_items():
+#         print(k, v)
+#         if k in d:
+#             print([*(d[k],)] + [v])
+#             d[k] = [*(d[k],)] + [v]
+#         else:
+#             d[k] = v
+#
+#     print(d)
+#     for key, val in q.query_params.multi_items():
+#         print(key, val)
+#     return {'data': 'here should be some data'}
+#     # PlayerGoalsFilteredQuery.model_validate(q.query_params.multi_items())
+#
 
 @players_router.get('/stats')
 async def get_players_filtered(q: str):
-    return {'data': 'all players filered data'}
+    return {'data': 'all players filtered data'}
 
 
 @players_router.get('')
@@ -57,8 +57,10 @@ async def get_players_bio(
 ):
     data = await db.execute(select(PlayersBio))
     # .where(PlayersBio.tnt_id == tnt_id))
+    print(f"data: {data}")
     ret = data.scalars().all()
-    print(len(ret))
+    print(f"len(ret): {len(ret)}")
+    # print(f"ret: {ret}") # вернул PlayersBio object
     return ret
 
 
@@ -85,21 +87,29 @@ async def player_stats_by_metric(
         helper_obj: helper_dep,
 ):
     # TODO: прикрутить авторизацию - выше закоменчена
-    return await get_player_stats_by_metric(player_id=player_id, helper_obj=helper_obj, db=db)
+    exclude_list = ["EQ_TOI", "PP_TOI", "SH_TOI", "EN_TOI",
+                    "ENO_TOI", "TOI", "toi_avg", "pptoi_avg",
+                    "shtoi_avg", "eqtoi_avg", "entoi_avg",
+                    "enotoi_avg", "ToO", "EV_ToO", "PP_ToO",
+                    "SH_ToO", "EN_ToO", "ToD", "EV_ToD", "PP_ToD",
+                    "SH_ToD", "EN_ToD", "ToO_avg", "ToD_avg"]
+    return await get_player_stats_by_metric(player_id=player_id, helper_obj=helper_obj, db=db,
+                                            exclude_sum=exclude_list)
 
 
-@players_router.get('/{player_id}/metrics/{metric}/all')
-# async def secured_data(token: oauth2_dep, db: db_dep):
-async def player_all_stats_by_metric(
-        player_id: Annotated[int, Path()],
-        helper_obj: helper_dep,
-        db: db_dep,
-):
-    orm_model = helper_obj.orm_model
-    stmt = select(orm_model).where(orm_model.global_id == player_id).order_by(desc(orm_model.tnt_id))
-    data = await db.execute(stmt)
-    # ret = [val.__dict__ for val in data.scalars().all()]
-    return data.scalars().all()
+# @players_router.get('/{player_id}/metrics/{metric}/all')
+# # async def secured_data(token: oauth2_dep, db: db_dep):
+# async def player_all_stats_by_metric(
+#         player_id: Annotated[int, Path()],
+#         helper_obj: helper_dep,
+#         db: db_dep,
+# ):
+#     # orm_model = helper_obj.orm_model
+#     # stmt = select(orm_model).where(orm_model.global_id == player_id).order_by(desc(orm_model.tnt_id))
+#     # data = await db.execute(stmt)
+#     # # ret = [val.__dict__ for val in data.scalars().all()]
+#     # return data.scalars().all()
+#     return await get_player_stats_by_metric(player_id=player_id, helper_obj=helper_obj, db=db)
 
 # @players_router.get('/{player_id}/metrics/{metric}/')
 # # async def secured_data(token: oauth2_dep, db: db_dep):

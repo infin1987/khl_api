@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic.fields import computed_field
 
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env')
     ACCESS_TOKEN_SECRET_KEY: str

@@ -73,6 +73,10 @@ def filter_params_for_where_orm_objects(
 
 
 class ModelSchemaHelper:
+    """
+    унаследоваться от игрока класса
+
+    """
 
     # TODO: Можно добавить метод, который в зависимости от метрики будет добавлять еще параметров в group_by и сумму
 
