@@ -57,11 +57,16 @@ class PlayersPenaltiesFilteredQuery(PlayersPenaltiesQuery, PlayersParamsValidato
 
 
 class PlayersShotsQuery(PlayersGoalsQuery):
-    pass
+    league: Literal['khl', 'mhl', 'whl', 'vhl', None] = None
+    tnt_id: int | None = None
+    tnt_type: Literal['r', 'p', 'n', None] = None
+    position: str | None = None
 
 
 class PlayersShotsFilteredQuery(PlayersShotsQuery, PlayersParamsValidator):
-    pass
+    time_period: Annotated[list[int] | int | None, Query()] = None
+    team_status: Annotated[list[str] | str | None, Query()] = None
+    net: Literal['en', 'eno', 'enb', 'gk', None] = None
 
 
 class PlayersTotalResponse(BaseModel):

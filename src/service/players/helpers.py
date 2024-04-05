@@ -1,6 +1,6 @@
 from typing import Annotated, Any, Union, Literal
 import sys
-import logging
+from error_handling_config import _error, _debug, _info, _warning
 
 from fastapi import Path, Header, Request, HTTPException, Depends
 from pydantic import BaseModel, ValidationError
@@ -148,7 +148,7 @@ class ModelSchemaHelper:
             all_needed_params = list(self.schema.__fields__.keys())
             for param in self._query_params:
                 if param not in all_needed_params:
-                    logging.error(f'Wrong parameter ({param}) :: doesn\'t exist. Uses '
+                    _error(f'Wrong parameter ({param}) doesn\'t exist. Uses '
                                   f'one of these: {all_needed_params}')
                     raise HTTPException(status_code=404,
                                         detail=f'Wrong parameter ({param}) :: doesn\'t exist. Uses '
@@ -165,10 +165,10 @@ class ModelSchemaHelper:
             for error in ers:
                 if error['type'] == 'value_error':
                     error['ctx']['error'] = error['msg']
-            logging.error(f"Error in helpers.populate_with_params (ValidationError):: {ers}")
+            _error(f"ValidationError --> {ers}")
             raise HTTPException(status_code=400, detail=ers)
         except AttributeError as ae:
-            logging.error(f"Error in helpers.populate_with_params (AttributeError) :: Wrong metric name - {ae}")
+            _error(f"error in helpers.populate_with_params (AttributeError) :: Wrong metric name --> {ae}")
             raise HTTPException(status_code=400, detail='Wrong metric name')
 
     def __repr__(self):
