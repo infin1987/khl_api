@@ -4,14 +4,10 @@ from typing import Optional
 from db.api.config import Base
 
 
-class TeamsBase(Base):
-    pass
-
-
 class Teams_TM6(Base):
     __tablename__ = "team_TM6_api"
 
-    clid: Mapped[int] = mapped_column(nullable=False)
+    clid: Mapped[int] = mapped_column(nullable=False, primary_key=True)
     tnt_id: Mapped[int] = mapped_column(nullable=False)
     team_id: Mapped[int] = mapped_column(nullable=False)
     team_name: Mapped[str] = mapped_column(nullable=False)

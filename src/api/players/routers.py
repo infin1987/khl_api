@@ -87,14 +87,7 @@ async def player_stats_by_metric(
         helper_obj: helper_dep,
 ):
     # TODO: прикрутить авторизацию - выше закоменчена
-    exclude_list = ["EQ_TOI", "PP_TOI", "SH_TOI", "EN_TOI",
-                    "ENO_TOI", "TOI", "toi_avg", "pptoi_avg",
-                    "shtoi_avg", "eqtoi_avg", "entoi_avg",
-                    "enotoi_avg", "ToO", "EV_ToO", "PP_ToO",
-                    "SH_ToO", "EN_ToO", "ToD", "EV_ToD", "PP_ToD",
-                    "SH_ToD", "EN_ToD", "ToO_avg", "ToD_avg"]
-    return await get_player_stats_by_metric(player_id=player_id, helper_obj=helper_obj, db=db,
-                                            exclude_sum=exclude_list)
+    return await get_player_stats_by_metric(player_id=player_id, helper_obj=helper_obj, db=db)
 
 
 # @players_router.get('/{player_id}/metrics/{metric}/all')
