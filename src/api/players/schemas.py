@@ -195,8 +195,8 @@ class PlayersPlusminusQuery(BaseModel):
 
 class PlayersPlusminusFilteredQuery(PlayersAssistsQuery, PlayersParamsValidator):
     time_period: Annotated[list[int] | int | None, Query()] = None
-    team_status: Annotated[list[str] | str | None, Query()] = None
-    net: Literal['en', 'eno', 'enb', 'gk', None] = None
+    # team_status: Annotated[list[str] | str | None, Query()] = None
+    # net: Literal['en', 'eno', 'enb', 'gk', None] = None
 
 
 class PlayersToiQuery(BaseModel):

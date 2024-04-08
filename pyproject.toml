@@ -16,6 +16,7 @@ redis = "^5.0.2"
 clickhouse-sqlalchemy = "^0.3.0"
 asynch = "^0.2.3"
 greenlet = "^3.0.3"
+async-lru = "^2.0.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.1"

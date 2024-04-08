@@ -516,7 +516,7 @@ class PlayerToi(PlayersMetricMixin, Base):
     sft_avg: Mapped[float] = mapped_column(Float(precision=5, decimal_return_scale=4, asdecimal=True), nullable=True)
 
 
-class PlayerTOAD(PlayersMetricFilteredMixin, PlayersMetricMixin, Base):
+class PlayerTOAD(PlayersMetricMixin, Base):
     __tablename__ = "pl_toad_api"
 
     games_count: Mapped[int] = mapped_column(nullable=False)

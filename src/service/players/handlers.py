@@ -25,7 +25,7 @@ async def get_player_stats_by_metric(
     query_params = helper_obj.validated_query_params
     _debug(f"query params :: {query_params}")
 
-    if "team_stats" in query_params.keys() or "time_period" in query_params.keys() or "net" in query_params.keys():
+    if "team_status" in query_params.keys() or "time_period" in query_params.keys() or "net" in query_params.keys():
         """Тут надо суммировать по всем полям показателей"""
         cols_obj_to_sum = {name: func.sum(col).label(name) for name, col in orm_model.__table__.columns.items() if
                            name in orm_model_columns}

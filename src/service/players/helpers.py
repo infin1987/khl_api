@@ -141,15 +141,17 @@ class ModelSchemaHelper:
             self.schema = self.get_schema_by_metric()  # <class 'api.players.schemas.PlayersSatFilteredQuery'>
             self._basic_group_by_schema = self.get_basic_groupby_schema()  # в схемах --> PlayersAssistsQuery
             self._query_params = self.get_query_params(request=request)  # квери параметры из запроса {'tnt_id': '245'}
+            print(f"PIIISSKAA 1: {self._query_params}")
 
             """
             Проверяем, корректны ли все квери параметры (есть ли они вообше в схеме)
             """
             all_needed_params = list(self.schema.__fields__.keys())
+            print(f"PIIISSKAA 2: {all_needed_params}")
             for param in self._query_params:
                 if param not in all_needed_params:
                     _error(f'Wrong parameter ({param}) doesn\'t exist. Uses '
-                                  f'one of these: {all_needed_params}')
+                           f'one of these: {all_needed_params}')
                     raise HTTPException(status_code=404,
                                         detail=f'Wrong parameter ({param}) :: doesn\'t exist. Uses '
                                                f'one of these: {all_needed_params}')
