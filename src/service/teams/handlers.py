@@ -1,21 +1,14 @@
-from typing import Annotated
-
-from fastapi import Depends, Path
 from sqlalchemy import select, func
 from error_handling_config import _error, _debug, _info, _warning
 
 from api.dependencies import db_dep
-from service.players.helpers import ModelSchemaHelper
+from service.teams.helpers import ModelSchemaHelperTeams as ModelSchemaHelper
 
 
-async def get_player_stats_by_metric(
-        player_id: int,
+async def get_team_stats_by_metric(
+        club_name: str,
         helper_obj: ModelSchemaHelper,
         db: db_dep,
-        add_sum_col_names: list[str] | None = None,
-        add_group_by_col_names: list[str] | None = None,
-        exclude_sum: list[str] | None = None,
-        exclude_group: list[str] | None = None
 ):
     orm_model = helper_obj.orm_model  # получаем ORM-модель алхимии (api.models.player.PlayerPlusminus)
     orm_model_columns = orm_model.get_columns()
@@ -25,7 +18,7 @@ async def get_player_stats_by_metric(
     query_params = helper_obj.validated_query_params
     _debug(f"query params :: {query_params}")
 
-    if "team_status" in query_params.keys() or "time_period" in query_params.keys() or "net" in query_params.keys():
+    if "time_period" in query_params.keys() or "net" in query_params.keys():
         """Тут надо суммировать по всем полям показателей"""
         cols_obj_to_sum = {name: func.sum(col).label(name) for name, col in orm_model.__table__.columns.items() if
                            name in orm_model_columns}
@@ -39,7 +32,7 @@ async def get_player_stats_by_metric(
         _debug(f"basic_groupbys_obj: {basic_groupbys_obj}")
 
         # Объекты алхимии для фильтрации
-        ands_obj = helper_obj.filter_params_for_where_orm_objects(query_params=query_params, id_filter=player_id)
+        ands_obj = filter_params_for_where_orm_objects(req_model=orm_model, query_params=query_params, id_filter=club_name)
         # _debug(f"ands_obj: {ands_obj[2]}")
 
         # GroupBy объекты, которые получаем из query параметров запроса (и смотрим, нет ли их в Basic)
@@ -62,7 +55,7 @@ async def get_player_stats_by_metric(
 
     else:
         # Объекты алхимии для фильтрации
-        ands_obj = helper_obj.filter_params_for_where_orm_objects(query_params=query_params, id_filter=player_id)
+        ands_obj = filter_params_for_where_orm_objects(req_model=orm_model, query_params=query_params, id_filter=player_id)
         _debug(f"ands_obj: {ands_obj}")
 
         stmt = select(orm_model).where(*ands_obj)

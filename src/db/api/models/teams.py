@@ -4,9 +4,8 @@ from typing import Optional
 from db.api.config import Base
 
 
-class Teams_TM6(Base):
-    __tablename__ = "team_TM6_api"
-
+class TeamsMixin:
+    club_name: Mapped[str] = mapped_column(nullable=False)
     clid: Mapped[int] = mapped_column(nullable=False, primary_key=True)
     tnt_id: Mapped[int] = mapped_column(nullable=False)
     team_id: Mapped[int] = mapped_column(nullable=False)
@@ -14,6 +13,11 @@ class Teams_TM6(Base):
     season: Mapped[str] = mapped_column(nullable=False)
     league: Mapped[str] = mapped_column(nullable=False)
     tnt_type: Mapped[str] = mapped_column(nullable=False)
+
+
+class Teams_Tm6(TeamsMixin, Base):
+    __tablename__ = "team_TM6_api"
+
     GP: Mapped[int] = mapped_column(nullable=False)
     GF: Mapped[int] = mapped_column(nullable=False)
     GF_avg: Mapped[int] = mapped_column(nullable=False)
