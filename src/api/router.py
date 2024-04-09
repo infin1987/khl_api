@@ -1,11 +1,10 @@
-
 from fastapi import APIRouter
-
 from .players.routers import players_router
+from .teams.routers import teams_router
 
 main_stats_router = APIRouter()
 main_stats_router.include_router(players_router)
-
+main_stats_router.include_router(teams_router)
 #
 # def get_model_by_metric(tablename: str):
 #     for elem in Base.registry.mappers:

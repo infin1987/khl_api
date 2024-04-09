@@ -34,11 +34,11 @@ app.include_router(main_auth_router)
 #     dependencies=[Depends(get_token_header)],
 #     responses={418: {"description": "I'm a teapot"}},
 # )
-#
+
 
 # @app.get("/")
 # async def root():
 #     return {"message": "Hello Bigger Applications!"}
 
-if __name__=="__main__":
+if __name__ == "__main__":
     uvicorn.run('main:app', host='127.0.0.1', port=8000, reload=True)

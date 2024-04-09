@@ -1,9 +1,23 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
-from fastapi import Depends
+from fastapi import APIRouter, Query, Request, Header, Path, Depends
 
-from service.teams.helpers import ModelSchemaHelper
+from api.dependencies import db_dep
+from service.helpers import check_last_updated
+from service.teams.handlers import get_team_stats_by_metric
 
-helper_dep = Annotated[ModelSchemaHelper, Depends(ModelSchemaHelper('teams', 'tms'))]
+from service.teams.helpers import helper_dep
 
-'pl_goals_api_'
+teams_router = APIRouter(prefix='/teams', tags=['teams'], dependencies=[Depends(check_last_updated)])
+
+
+@teams_router.get('/{club_name}/metrics/{metric}/')
+# async def secured_data(token: oauth2_dep, db: db_dep):
+async def teams_stats_by_metric(
+        club_name: Annotated[str, Path()],
+        db: db_dep,
+        helper_obj: helper_dep,
+):
+    return await get_team_stats_by_metric(club_name=club_name, helper_obj=helper_obj, db=db)
+
+
