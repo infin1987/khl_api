@@ -32,7 +32,7 @@ async def get_team_stats_by_metric(
         _debug(f"basic_groupbys_obj: {basic_groupbys_obj}")
 
         # Объекты алхимии для фильтрации
-        ands_obj = filter_params_for_where_orm_objects(req_model=orm_model, query_params=query_params, id_filter=club_name)
+        ands_obj = helper_obj.filter_params_for_where_orm_objects(query_params=query_params, id_filter=club_name)
         # _debug(f"ands_obj: {ands_obj[2]}")
 
         # GroupBy объекты, которые получаем из query параметров запроса (и смотрим, нет ли их в Basic)
@@ -55,7 +55,7 @@ async def get_team_stats_by_metric(
 
     else:
         # Объекты алхимии для фильтрации
-        ands_obj = filter_params_for_where_orm_objects(req_model=orm_model, query_params=query_params, id_filter=player_id)
+        ands_obj = helper_obj.filter_params_for_where_orm_objects(query_params=query_params, id_filter=club_name)
         _debug(f"ands_obj: {ands_obj}")
 
         stmt = select(orm_model).where(*ands_obj)

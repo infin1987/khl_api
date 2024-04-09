@@ -4,16 +4,8 @@ from error_handling_config import _error, _debug, _info, _warning
 
 from fastapi import Path, Header, Request, HTTPException, Depends
 from pydantic import BaseModel, ValidationError
-from starlette.responses import JSONResponse
-
-from api.players.schemas import PlayersGoalsFilteredQuery, PlayersGoalsQuery
 from db.api.config import Base
 from api.players import schemas as players_schemas
-from db.api.models.player import PlayersGoals, PlayersGoalsFilter
-from auth.dependencies import rcache_dep
-import json, pickle
-
-from exceptions import no_new_data_exception
 
 metrics = ['goals', 'penalties', 'shots', 'faceoffs', 'assists',
            'points', 'activity', 'bullits', 'plusminus', 'toi', 'toad', 'shotattempts', 'sat']
@@ -98,8 +90,11 @@ class ModelSchemaHelper:
                              ):
         try:
             self.metric = metric
+            print(f"METRIC LOOOOOOOOOOL: {self.metric}")
             self.schema = self.get_schema_by_metric()  # <class 'api.players.schemas.PlayersSatFilteredQuery'>
+            print(f"SCHEMA LOOOOOOOOOOL: {self.schema}")
             self._basic_group_by_schema = self.get_basic_groupby_schema()  # в схемах --> PlayersAssistsQuery
+            print(f"basic_group_by_schema LOOOOOOOOOOL: {self._basic_group_by_schema}")
             self._query_params = self.get_query_params(request=request)  # квери параметры из запроса {'tnt_id': '245'}
 
             """
