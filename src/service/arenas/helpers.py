@@ -92,7 +92,7 @@ class ModelSchemaHelper:
         return self.schema.__bases__[0]
 
     def check_for_invalid_query_params(self):
-        all_needed_params = list(self.schema.__fields__.keys())
+        all_needed_params = list(self.schema.model_fields.keys())
         for param in self._query_params:
             if param not in all_needed_params:
                 _error(f'Wrong parameter ({param}) doesn\'t exist. Uses '
