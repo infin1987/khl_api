@@ -67,6 +67,7 @@ class ModelSchemaHelper:
             net: str | None = None,
             position: str | None = None,
             request: Request = None,
+            season: str | None = None,
     ) -> Base:
         """
         Кроме аргументов выше, передаем в 153 строке (self.orm_model) словарь аргументов
