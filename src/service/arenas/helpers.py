@@ -107,11 +107,8 @@ class ModelSchemaHelper:
                              ):
         try:
             self.metric = metric
-            print(f"METRIC LOOOOOOOOOOL: {self.metric}")
             self.schema = self.get_schema_by_metric()  # <class 'api.players.schemas.PlayersSatFilteredQuery'>
-            print(f"SCHEMA LOOOOOOOOOOL: {self.schema}")
             self._basic_group_by_schema = self.get_basic_groupby_schema()  # в схемах --> PlayersAssistsQuery
-            print(f"basic_group_by_schema LOOOOOOOOOOL: {self._basic_group_by_schema}")
             self._query_params = self.get_query_params(request=request)  # квери параметры из запроса {'tnt_id': '245'}
 
             # Проверяем, корректны ли все квери параметры (есть ли они вообше в схеме)
@@ -121,7 +118,6 @@ class ModelSchemaHelper:
             self.validated_query_params = {k: v for k, v in self.schema.model_validate(self._query_params) if v}
 
             self.orm_model = self.get_orm_model(metric=metric, **self.validated_query_params, request=request)
-            print(f"OOOOOOOOOOOOOORRRRRRRRRRRRM: {self.orm_model}")
             self.basic_group_bys = self._basic_group_by_schema.model_validate(self.validated_query_params).model_dump()
         except ValidationError as e:
             ers = e.errors()

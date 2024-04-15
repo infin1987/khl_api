@@ -36,6 +36,7 @@ class ArenasTntQuery(BaseModel):
     league: Literal['khl', 'mhl', 'whl', 'vhl', None] = None
     tnt_id: int | None = None
     tnt_type: Literal['r', 'p', 'n', None] = None
+    season: str = None
 
 
 class ArenasTntFilteredQuery(ArenasTntQuery):
