@@ -8,4 +8,3 @@ from src.main import app
 async def ac():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         yield ac
-
