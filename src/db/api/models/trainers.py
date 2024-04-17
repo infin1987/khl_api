@@ -6,7 +6,7 @@ from datetime import datetime
 from db.api.config import Base
 
 
-class ArenaMixin:
+class TrainerMixin:
 
     tnt_id: Mapped[int] = mapped_column(primary_key=True, nullable=False)
     idseason: Mapped[int] = mapped_column(nullable=False)
@@ -61,7 +61,7 @@ class ArenaMixin:
     max_ts: Mapped[int] = mapped_column(nullable=True)
 
 
-class ArenaTnt(ArenaMixin, Base):
+class TrainerTnt(TrainerMixin, Base):
 
     __tablename__ = "trainer_tnt_api"
 
@@ -70,7 +70,7 @@ class ArenaTnt(ArenaMixin, Base):
 
 
 
-class ArenaGames(ArenaMixin, Base):
+class TrainerGames(TrainerMixin, Base):
 
     __tablename__ = "trainer_games_api"
 
