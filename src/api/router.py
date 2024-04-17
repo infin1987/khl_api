@@ -5,6 +5,7 @@ from .players.routers import players_router
 from .refs.routers import refs_router
 from .teams.routers import teams_router
 from .tests.routers import tests_router
+from .trainers.routers import trainers_router
 
 main_stats_router = APIRouter()
 main_tests_router = APIRouter()
@@ -14,3 +15,4 @@ main_stats_router.include_router(teams_router)
 main_tests_router.include_router(tests_router)
 main_stats_router.include_router(arenas_router)
 main_stats_router.include_router(refs_router)
+main_stats_router.include_router(trainers_router)
